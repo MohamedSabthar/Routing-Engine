@@ -29,49 +29,4 @@ public class Vehicle {
 
 }
 
-class VehicleType {
-	
-	private Capacity capacity;
 
-	public Capacity getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(Capacity capacity) {
-		this.capacity = capacity;
-	}
-
-	@Override
-	public String toString() {
-		return "VehicleType [capacity=" + capacity + "]";
-	}
-
-}
-
-class Capacity {
-
-	private double volume;
-	private double max_load;
-
-	public double getVolume() {
-		return volume;
-	}
-
-	public void setVolume(double volume) {
-		this.volume = volume;
-	}
-
-	public double getMax_load() {
-		return max_load;
-	}
-
-	public void setMax_load(double max_load) {
-		this.max_load = max_load;
-	}
-
-	@Override
-	public String toString() {
-		return "Capacity [volume=" + volume + ", max_load=" + max_load + "]";
-	}
-
-}

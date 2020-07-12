@@ -16,7 +16,7 @@ import com.smartcargo.engine.service.RoutingService;
 public class RouteEngineController {
 
 	@PostMapping("/make-cluster")
-	public ArrayList<Route> test(@RequestBody EngineParams parameters) {
+	public ArrayList<Route> test(@RequestBody EngineParams parameters) throws InterruptedException {
 
 		RoutingService.calculateDistanceFromDepot(parameters.getOrders(), parameters.getDepot());
 		System.out.println(parameters.getOrders());
@@ -26,7 +26,7 @@ public class RouteEngineController {
 		Route r1 = new Route();
 		r.addOrder("0");
 		r1.addOrder("1");
-
+		r.setVehicle("vehicle one");
 //		schdule.remove(o);
 
 		schdule.add(r);
@@ -35,6 +35,7 @@ public class RouteEngineController {
 		schdule.remove(r1);
 
 		System.out.println(schdule);
+//		TimeUnit.SECONDS.sleep(4*60);
 		return schdule;
 	}
 
