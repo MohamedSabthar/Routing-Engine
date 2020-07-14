@@ -45,17 +45,17 @@ public class RouteEngineController {
 		Order farthersOrder, currentOrder;
 		Vehicle currentVehicle, tempVehicle = null;
 
-		double totalClusterVolume = 0, totalClusterLoad =0;
-	
-		//need to check & remove orders where load/volume greater than maximum capacity vehicle
-		
+		double totalClusterVolume = 0, totalClusterLoad = 0;
+
+		// need to check & remove orders where load/volume greater than maximum capacity
+		// vehicle
+
 		System.out.println("\n\tRunning Make cluster.......\n\n");
 
-	main: while (vehicles.size() > 0 && orders.size() > 0) {
-			
-			System.out.println("\t Cluster : "+ cluster);
-			
-			
+		main: while (vehicles.size() > 0 && orders.size() > 0) {
+
+			System.out.println("\t Cluster : " + cluster);
+
 			farthersOrder = orders.get(0); // get the farthest order from the orders
 			currentVehicle = vehicles.get(0); // get the largest vehicle
 
@@ -67,67 +67,74 @@ public class RouteEngineController {
 
 			schdule.get(cluster).setVehicle(currentVehicle.get_id()); // assign the vehicle to the cluster
 			RoutingService.removeVehicle(vehicles, currentVehicle); // remove the assigned vehicle from the vehicle list
-			
-			 totalClusterVolume = 0; totalClusterLoad = 0; // initialize the cluster load and volume to zero
-			
+
+			totalClusterVolume = 0;
+			totalClusterLoad = 0; // initialize the cluster load and volume to zero
+
 			while (currentVehicle.getLoad() > 0 && currentVehicle.getVolume() > 0) {
-				
-				double reducedVehicleLoad = currentVehicle.getLoad()- currentOrder.getLoad();
-				double reducedVehicleVolume = currentVehicle.getVolume()- currentOrder.getVolume();
-				
+
+				double reducedVehicleLoad = currentVehicle.getLoad() - currentOrder.getLoad();
+				double reducedVehicleVolume = currentVehicle.getVolume() - currentOrder.getVolume();
+
 				System.out.println("**********************");
 				System.out.println(currentVehicle);
 				System.out.println(currentOrder);
-				System.out.println("reducedLoad : "+ reducedVehicleLoad +"\t reducedVolume : " + reducedVehicleVolume);
+				System.out
+						.println("reducedLoad : " + reducedVehicleLoad + "\t reducedVolume : " + reducedVehicleVolume);
 				System.out.println("**********************");
-				
-				if(reducedVehicleLoad<0 || reducedVehicleVolume <0) break; //if load/volume constrain failed then go for a new cluster
-				
-				schdule.get(cluster).addOrder(currentOrder.get_id());	//add the order to the cluster
-				currentVehicle.setLoad(reducedVehicleLoad);	// update vehicle capacities after adding the order
+
+				if (reducedVehicleLoad < 0 || reducedVehicleVolume < 0)
+					break; // if load/volume constrain failed then go for a new cluster
+
+				schdule.get(cluster).addOrder(currentOrder.get_id()); // add the order to the cluster
+				currentVehicle.setLoad(reducedVehicleLoad); // update vehicle capacities after adding the order
 				currentVehicle.setVolume(reducedVehicleVolume);
-				
+
 				totalClusterLoad += currentOrder.getLoad(); // increase the cluster load & volume by current order
 				totalClusterVolume += currentOrder.getVolume();
-				
-				System.out.println("total cluster volume: " + totalClusterVolume + "\t total cluster load : " + totalClusterLoad);
+
+				System.out.println(
+						"total cluster volume: " + totalClusterVolume + "\t total cluster load : " + totalClusterLoad);
 				System.out.println("**********************\n");
-				
+
 				RoutingService.removeOrder(orders, currentOrder); // remove the order (which is added to the cluster)
-				
-				if(orders.size()<=0) break main; // if all orders scheduled then break out of the main loop
-				
+
+				if (orders.size() <= 0)
+					break main; // if all orders scheduled then break out of the main loop
+
 				currentOrder = RoutingService.nearestOrder(orders, currentOrder); // get the nearest order to the
-																					// current order and assign it as current order
-				
+																					// current order and assign it as
+																					// current order
+
 			}
-			
-			cluster++; //increment the cluster
+
+			cluster++; // increment the cluster
 
 		}
-		
-		
-		System.out.println("final cluster volume: " + totalClusterVolume + "\t final cluster load : " + totalClusterLoad);
-		
-		if(totalClusterVolume < tempVehicle.getVolume() && vehicles.size()>0 ) {
-			int index = vehicles.size()-1; // get the minimum volume vehicles index from list
+
+		if (totalClusterVolume < tempVehicle.getVolume() && vehicles.size() > 0) {
+			int index = vehicles.size() - 1; // get the minimum volume vehicles index from list
 			Vehicle minCapacityVehicle = vehicles.get(index);
-			
-			while(totalClusterVolume>minCapacityVehicle.getVolume() || totalClusterLoad > minCapacityVehicle.getLoad()) {
-				
+
+			while (totalClusterVolume > minCapacityVehicle.getVolume()
+					|| totalClusterLoad > minCapacityVehicle.getLoad()) {
+
 				System.out.println("**********************");
 				System.out.println(minCapacityVehicle);
 				System.out.println("**********************\n");
-				
+
 				index--;
-				if(index<0) break;
+				if (index < 0)
+					break;
 				minCapacityVehicle = vehicles.get(index);
 			}
-			
-			// check the constraints before assign a minimum capacity vehicle (for index==0 then need to check the constraints again)
-			if(minCapacityVehicle.getLoad()>=totalClusterLoad && minCapacityVehicle.getVolume()>=totalClusterVolume)
-				schdule.get(cluster).setVehicle(minCapacityVehicle.get_id());	
-				
+
+			// check the constraints before assign a minimum capacity vehicle (for index==0
+			// then need to check the constraints again)
+			if (minCapacityVehicle.getLoad() >= totalClusterLoad
+					&& minCapacityVehicle.getVolume() >= totalClusterVolume)
+				schdule.get(cluster).setVehicle(minCapacityVehicle.get_id());
+
 		}
 
 		return schdule;
