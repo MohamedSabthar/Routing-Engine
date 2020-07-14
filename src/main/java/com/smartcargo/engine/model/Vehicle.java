@@ -26,6 +26,22 @@ public class Vehicle {
 	public String toString() {
 		return "Vehicle [_id=" + _id + ", vehicle_type=" + vehicle_type + "]";
 	}
+	
+	public double getVolume() {
+		return vehicle_type.getCapacity().getVolume();
+	}
+	
+	public double getLoad() {
+		return vehicle_type.getCapacity().getMax_load();
+	}
+	
+	public void setVolume(double volume) {
+		vehicle_type.getCapacity().setVolume(volume);
+	}
+	
+	public void setLoad(double load) {
+		vehicle_type.getCapacity().setMax_load(load);
+	}
 
 }
 
