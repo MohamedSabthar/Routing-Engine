@@ -11,7 +11,6 @@ import com.smartcargo.engine.model.Vehicle;
 public class RoutingService {
 
 	public static void calculateDistanceFromDepot(ArrayList<Order> orders, Location depot) {
-
 		double distanceFromDepot;
 		for (Order order : orders) {
 			distanceFromDepot = caculateHarvasine(order.getLocation(), depot);
@@ -27,17 +26,45 @@ public class RoutingService {
 		Collections.sort(orders, c);
 		return;
 	}
-	
+
 	public static void sortVehicleByVolume(ArrayList<Vehicle> vehicles) {
 		// compare two vehicle objects using volume
-		Comparator<Vehicle> c = (c1,c2) -> 
-		c1.getVehicle_type().getCapacity().getVolume() > c2.getVehicle_type().getCapacity().getVolume() ? -1 : 1;
+		Comparator<Vehicle> c = (c1,
+				c2) -> c1.getVehicle_type().getCapacity().getVolume() > c2.getVehicle_type().getCapacity().getVolume()
+						? -1
+						: 1;
 		// sort the vehicles in descending order of the volumes field
 		Collections.sort(vehicles, c);
 		return;
 	}
-	
-	
+
+	public static void removeVehicle(ArrayList<Vehicle> vehicles, Vehicle vehicle) {
+		// remove the vehicle from the arrayList
+		vehicles.remove(vehicle);
+		return;
+	}
+
+	public static void removeOrder(ArrayList<Order> orders, Order order) {
+		// remove the given order from the arrayList
+		orders.remove(order);
+		return;
+	}
+
+	public static Order nearestOrder(final ArrayList<Order> orders, final Order currentOrder) {
+
+		double minDistance = caculateHarvasine(currentOrder.getLocation(), orders.get(0).getLocation());
+		Order nearestOrder = orders.get(0);
+		double distance;
+		for (Order i : orders) {
+			distance = caculateHarvasine(currentOrder.getLocation(), i.getLocation());
+			if (minDistance > distance) {
+				minDistance = distance;
+				nearestOrder = i;
+			}
+		}
+
+		return nearestOrder;
+	}
 
 	/** helper functions and variables **/
 
