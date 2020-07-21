@@ -2,6 +2,8 @@ package com.smartcargo.engine.controller;
 
 import java.util.ArrayList;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +21,16 @@ import com.smartcargo.engine.service.RoutingService;
 public class RouteEngineController {
 
 	@PostMapping("/make-cluster")
-	public ArrayList<Route> test(@RequestBody EngineParams parameters) throws InterruptedException {
+	public ResponseEntity<Object> makeCluster(@RequestBody EngineParams parameters) throws InterruptedException {
 
 		ArrayList<Order> orders = parameters.getOrders();
 		ArrayList<Vehicle> vehicles = parameters.getVehicles();
 		Location depot = parameters.getDepot();
-
+		
+		if(depot==null || depot.getLang()==0 &&  depot.getLat()==0) return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		if(vehicles==null || vehicles.size()==0 ) return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		if(orders==null || orders.size()==0) return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		
 		// calculate all orders distance from depot
 		RoutingService.calculateDistanceFromDepot(orders, depot);
 		System.out.println(orders);
@@ -137,7 +143,7 @@ public class RouteEngineController {
 
 		}
 
-		return schdule;
+		return new ResponseEntity<>(schdule,HttpStatus.OK);
 	}
 
 }
