@@ -70,7 +70,7 @@ public class RoutingService {
 
 	private static final int earthRadius = 6371;
 
-	private static double caculateHarvasine(final Location source, final Location dest) {
+	public static double caculateHarvasine(final Location source, final Location dest) {
 
 		double diffLat = toRad(dest.getLat() - source.getLat());
 		double diffLang = toRad(dest.getLang() - source.getLang());
