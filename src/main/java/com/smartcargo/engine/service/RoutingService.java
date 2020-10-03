@@ -1,13 +1,18 @@
 package com.smartcargo.engine.service;
 
 import java.util.ArrayList;
+
+
 import java.util.Collections;
 import java.util.Comparator;
+
+import org.springframework.stereotype.Service;
 
 import com.smartcargo.engine.model.Location;
 import com.smartcargo.engine.model.Order;
 import com.smartcargo.engine.model.Vehicle;
 
+@Service
 public class RoutingService {
 
 	public static void calculateDistanceFromDepot(ArrayList<Order> orders, Location depot) {
