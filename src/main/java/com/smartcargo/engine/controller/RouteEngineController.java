@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartcargo.engine.model.ClusteredOrders;
 import com.smartcargo.engine.model.EngineParams;
 import com.smartcargo.engine.model.Location;
 import com.smartcargo.engine.model.Order;
@@ -145,5 +146,11 @@ public class RouteEngineController {
 
 		return new ResponseEntity<>(schdule,HttpStatus.OK);
 	}
+	
+	@PostMapping("/generate-route")
+	public ResponseEntity<Object> generateRoute(@RequestBody ClusteredOrders orders) throws InterruptedException {
+		 return new ResponseEntity<>(orders,HttpStatus.OK);
+	};
+	
 
 }
