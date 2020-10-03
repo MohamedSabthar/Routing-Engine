@@ -13,7 +13,7 @@ import com.smartcargo.engine.model.Location;
 import com.smartcargo.engine.model.Order;
 import com.smartcargo.engine.model.Vehicle;
 import com.smartcargo.engine.model.VehicleType;
-import com.smartcargo.engine.service.RoutingService;
+import com.smartcargo.engine.service.CommonService;
 
 
 @SpringBootTest
@@ -37,7 +37,7 @@ class RoutingEngineApplicationTests {
 		vehicles.add(vOne);
 		vehicles.add(vTwo);
 		
-		RoutingService.sortVehicleByVolume(vehicles);
+		CommonService.sortVehicleByVolume(vehicles);
 		
 		Vehicle expectedOutput[] = {vOne,vTwo};
 		
@@ -68,7 +68,7 @@ class RoutingEngineApplicationTests {
 		orders.add(three);
 		orders.add(four);		
 		
-		RoutingService.sortByFartherstDistance(orders);
+		CommonService.sortByFartherstDistance(orders);
 		
 		Order expectedOutput[] = {two,three,one,four};
 
@@ -95,7 +95,7 @@ class RoutingEngineApplicationTests {
 		Vehicle expectedOutput[] = {one,two,three};
 		assertArrayEquals(vehicles.toArray(),expectedOutput);
 		
-		RoutingService.removeVehicle(vehicles, two);
+		CommonService.removeVehicle(vehicles, two);
 		expectedOutput = new Vehicle[2];
 		expectedOutput[0] = one;
 		expectedOutput[1] = three;
@@ -140,16 +140,16 @@ class RoutingEngineApplicationTests {
 		orders.add(two);
 				
 		
-		Order expected = RoutingService.nearestOrder(orders, currentOrder);
+		Order expected = CommonService.nearestOrder(orders, currentOrder);
 		Order actual = one;
 		
 		assertEquals(expected, actual);
 		
-		RoutingService.removeOrder(orders, actual); //should return wellampitiya object
+		CommonService.removeOrder(orders, actual); //should return wellampitiya object
 		
 		actual = two;
-		expected = RoutingService.nearestOrder(orders, currentOrder); 
-		RoutingService.removeOrder(orders, actual);		//should return ucsc object
+		expected = CommonService.nearestOrder(orders, currentOrder); 
+		CommonService.removeOrder(orders, actual);		//should return ucsc object
 		
 		
 

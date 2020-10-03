@@ -13,7 +13,7 @@ import com.smartcargo.engine.model.Order;
 import com.smartcargo.engine.model.Vehicle;
 
 @Service
-public class RoutingService {
+public class CommonService {
 
 	public static void calculateDistanceFromDepot(ArrayList<Order> orders, Location depot) {
 		double distanceFromDepot;
@@ -75,7 +75,7 @@ public class RoutingService {
 
 	private static final int earthRadius = 6371;
 
-	private static double caculateHarvasine(final Location source, final Location dest) {
+	public static double caculateHarvasine(final Location source, final Location dest) {
 
 		double diffLat = toRad(dest.getLat() - source.getLat());
 		double diffLang = toRad(dest.getLang() - source.getLang());
