@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcargo.engine.model.ClusteredOrders;
 import com.smartcargo.engine.model.EngineParams;
+import com.smartcargo.engine.model.GeneticAlgorithm;
 import com.smartcargo.engine.model.Location;
 import com.smartcargo.engine.model.Order;
+import com.smartcargo.engine.model.Population;
 import com.smartcargo.engine.model.Route;
 import com.smartcargo.engine.model.Vehicle;
 import com.smartcargo.engine.service.RoutingService;
@@ -149,7 +151,25 @@ public class RouteEngineController {
 	
 	@PostMapping("/generate-route")
 	public ResponseEntity<Object> generateRoute(@RequestBody ClusteredOrders orders) throws InterruptedException {
-		 return new ResponseEntity<>(orders,HttpStatus.OK);
+		System.out.println("hit");
+		Population population = new Population(GeneticAlgorithm.POPULATION_SIZE,orders.getOrders());
+		population.sortRoutesByFitness();
+		GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(orders.getOrders());
+		int generationNumber = 0;
+		while(generationNumber < GeneticAlgorithm.NUMB_OF_GENERATIONS) {
+			population = geneticAlgorithm.evolve(population);
+			population.sortRoutesByFitness();
+			generationNumber++;
+			
+		}
+		ArrayList<String> generatedRoute = new ArrayList<String>();
+		 population.getRoutes().get(0).getOrders().forEach(x -> generatedRoute.add(x.get_id()));
+		
+		System.out.println("");
+		System.out.println("Best Route Found so far: " + generatedRoute);
+		System.out.println("w/ a distance of: "+String.format("%.2f",population.getRoutes().get(0).calculateTotalDistance())+ " miles");
+		
+		return new ResponseEntity<>(generatedRoute,HttpStatus.OK);
 	};
 	
 
